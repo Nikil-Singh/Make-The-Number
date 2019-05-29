@@ -1,7 +1,8 @@
 # Make-The-Number
 
 This program takes any number of positive digits and finds all possible ways of
-reaching a possible sum using only the +, -, * and / operations.
+reaching a possible sum using only the +, -, * and / operations. In this all
+numbers given must be used.
 
 For example, 1234 and the sum 10. 1 + 2 + 3 + 4 = 10.
 

@@ -27,10 +27,22 @@ int main() {
 
     //Gets the requried number string in the appropriate formats for calculations.
     vector<int> number = convertToVect(num);
-
     int finalSum = stoi(sum);
-
     calculate(number, finalSum);
 
+    /*
+    vector<vector<int> >myVector;
+    vector<int> t1;
+    vector<int> t2;
+    t1.push_back(1);
+    t1.push_back(2);
+    t1.push_back(3);
+    t2.push_back(4);
+    t2.push_back(6);
+    t2.push_back(8);
+    myVector.push_back(t1);
+    myVector.push_back(t2);
+    printVectorMatrix(myVector);
+    */
     return 0;
 }
