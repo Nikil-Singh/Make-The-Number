@@ -51,10 +51,10 @@ void calculate(vector<int> number, int sum) {
 
 //Updates the current sum.
 int updateSum(int sum, int num, int operation) {
-    if (operation == '+') sum += num;
-    if (operation == '*') sum *= num;
-    if (operation == '-' && ((sum - num) < 0)) sum -= num;
-    if (operation == '/' && ((sum % num) != 0)) sum /= num;
+    if (operation == ADDITION) sum += num;
+    if (operation == MULTIPLICATION) sum *= num;
+    if (operation == SUBTRACTION && ((sum - num) < 0)) sum -= num;
+    if (operation == DIVISION && ((sum % num) != 0)) sum /= num;
     return sum;
 }
 
@@ -74,9 +74,79 @@ void printVectorMatrix(vector<vector<int> > numbers) {
      vector<vector<int> > powerSet;
      vector<int> temp; //Temporarily holds operations.
      for (int i = 0; i < pow(operation.size(), 2); i++) {
-         for (int j = 0; j < operation.size(), j++) {
+         for (int j = 0; j < operation.size(); j++) {
              
          }
      }
      return powerSet;
  }
+
+string process(string fullExp, string tmpExp, int op, int req, int sum, int i, vector<int> numbers) {
+    cout << "tmpExp:" << tmpExp << "\n";
+    if (op == DIVISION) {
+        if (i < numbers.size() && sum % numbers[i] == 0) {
+            if (i == 0) {
+                tmpExp = to_string(numbers[i]);
+            } else {
+                tmpExp += tmpExp + " / " + to_string(numbers[i]);
+            }
+            return process(fullExp, tmpExp, DIVISION, req, sum/numbers[i], i+1, numbers) +
+                process(fullExp, tmpExp, MULTIPLICATION, req, sum/numbers[i], i+1, numbers) +
+                process(fullExp, tmpExp, ADDITION, req, sum/numbers[i], i+1, numbers) +
+                process(fullExp, tmpExp, SUBTRACTION, req, sum/numbers[i], i+1, numbers);
+        } else if (i == numbers.size() && sum == req) {
+            return fullExp + tmpExp + ",\n";
+        } else {
+            return "";
+        }
+    } else if (op == SUBTRACTION) {
+        if (i == numbers.size() && sum == req) {
+            return fullExp + tmpExp + ",\n";
+        } else if (i == numbers.size() && sum != req) {
+            return "";
+        } else {
+            if (i == 0) {
+                tmpExp = to_string(numbers[i]);
+            } else {
+                tmpExp += tmpExp + " - " + to_string(numbers[i]);
+            }
+            return process(fullExp, tmpExp, DIVISION, req, sum - numbers[i], i+1, numbers) +
+                process(fullExp, tmpExp, MULTIPLICATION, req, sum - numbers[i], i+1, numbers) +
+                process(fullExp, tmpExp, ADDITION, req, sum - numbers[i], i+1, numbers) +
+                process(fullExp, tmpExp, SUBTRACTION, req, sum - numbers[i], i+1, numbers);
+        }
+    } else if (op == MULTIPLICATION) {
+        if (i == numbers.size() && sum == req) {
+            return fullExp + tmpExp + ",\n";
+        } else if (i == numbers.size() && sum != req) {
+            return "";
+        } else {
+            if (i == 0) {
+                tmpExp = to_string(numbers[i]);
+            } else {
+                tmpExp += tmpExp + " * " + to_string(numbers[i]);
+            }
+            return process(fullExp, tmpExp, DIVISION, req, sum * numbers[i], i+1, numbers) +
+                process(fullExp, tmpExp, MULTIPLICATION, req, sum * numbers[i], i+1, numbers) +
+                process(fullExp, tmpExp, ADDITION, req, sum * numbers[i], i+1, numbers) +
+                process(fullExp, tmpExp, SUBTRACTION, req, sum * numbers[i], i+1, numbers);
+        }
+    } else if (op == ADDITION) {
+        if (i == numbers.size() && sum == req) {
+            return fullExp + tmpExp + ",\n";
+        } else if (i == numbers.size() && sum != req) {
+            return "";
+        } else {
+            if (i == 0) {
+                tmpExp = to_string(numbers[i]);
+            } else {
+                tmpExp += tmpExp + " + " + to_string(numbers[i]);
+            }
+            return process(fullExp, tmpExp, DIVISION, req, sum + numbers[i], i+1, numbers) +
+                process(fullExp, tmpExp, MULTIPLICATION, req, sum + numbers[i], i+1, numbers) +
+                process(fullExp, tmpExp, ADDITION, req, sum + numbers[i], i+1, numbers) +
+                process(fullExp, tmpExp, SUBTRACTION, req, sum + numbers[i], i+1, numbers);
+        }
+    }
+    return "";
+}

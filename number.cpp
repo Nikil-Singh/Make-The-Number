@@ -28,8 +28,13 @@ int main() {
     //Gets the requried number string in the appropriate formats for calculations.
     vector<int> number = convertToVect(num);
     int finalSum = stoi(sum);
-    calculate(number, finalSum);
-
+    //calculate(number, finalSum);
+    cout << num << "\n";
+    cout << finalSum << "\n";
+    cout << process("", "", DIVISION, finalSum, 0, 0, number) + 
+        process("", "", MULTIPLICATION, finalSum, 0, 0, number) +
+        process("", "", SUBTRACTION, finalSum, 0, 0, number) + 
+        process("", "", ADDITION, finalSum, 0, 0, number);
     /*
     vector<vector<int> >myVector;
     vector<int> t1;
