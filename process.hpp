@@ -8,6 +8,9 @@ using namespace std;
 #define MULTIPLICATION 3
 #define DIVISION 4
 
+// The number of solutions found.
+extern int solutions;
+
 // Converts string of a number into a vector.
 vector<int> convertToVect(string num);
 

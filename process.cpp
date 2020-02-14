@@ -1,5 +1,4 @@
 #include "process.hpp"
-
 //Converts string of a number into a vector.
 vector<int> convertToVect(string num) {
     vector<int> number;
@@ -30,7 +29,8 @@ void process(int op, int req, int sum, int depth, vector<int> numbers, string tm
                 sum = sum / numbers[depth];
                 if (sum == req) {
                     tmp = tmp + " / " + to_string(numbers[depth]) + ",\n";
-                    cout << tmp;
+                    cout << addBrackets(tmp);
+                    solutions++;
                 }
             } else if (depth < numbers.size() && sum % numbers[depth] == 0) {
                 // Concatenates to string the operation, and calls other functions to
@@ -50,7 +50,8 @@ void process(int op, int req, int sum, int depth, vector<int> numbers, string tm
                 sum = sum * numbers[depth];
                 if (sum == req) {
                     tmp = tmp + " * " + to_string(numbers[depth]) + ",\n";
-                    cout << tmp;
+                    cout << addBrackets(tmp);
+                    solutions++;
                 }
             } else if (depth < numbers.size()) {
                 // Concatenates to string the operation, and calls other functions to
@@ -70,7 +71,8 @@ void process(int op, int req, int sum, int depth, vector<int> numbers, string tm
                 sum = sum + numbers[depth];
                 if (sum == req) {
                     tmp = tmp + " + " + to_string(numbers[depth]) + ",\n";
-                    cout << tmp;
+                    cout << addBrackets(tmp);
+                    solutions++;
                 }
             } else if (depth < numbers.size()) {
                 // Concatenates to string the operation, and calls other functions to
@@ -90,7 +92,8 @@ void process(int op, int req, int sum, int depth, vector<int> numbers, string tm
                 sum = sum - numbers[depth];
                 if (sum == req) {
                     tmp = tmp + " - " + to_string(numbers[depth]) + ",\n";
-                    cout << tmp;
+                    cout << addBrackets(tmp);
+                    solutions++;
                 }
             } else if (depth < numbers.size()) {
                 // Concatenates to string the operation, and calls other functions to
@@ -112,4 +115,43 @@ void process(int op, int req, int sum, int depth, vector<int> numbers, string tm
         process(ADDITION, req, numbers[0], 1, numbers, tmp);
         process(SUBTRACTION, req, numbers[0], 1, numbers, tmp);
     }
+}
+
+// Converts an expression into an expression with required parenthesis, to meet
+// BODMAS standards.
+string addBrackets(string expression) {
+    string newExpression = "";
+    
+    // Figures out number of numbers in expression to determine bracket placement.
+    int x = ((expression.size() - 2)/4) + 1;
+    
+    // Adds required number of brackets at beginning of expression.
+    for (int i = 0; i < x - 2; i++) newExpression = newExpression + "(";
+
+    // Places other required brackets.
+    if (x - 2 > 0) {
+        int tmp = 0;
+        // Cycles through string and adds brackets facing the other way in
+        // required positions.
+        for (int i = 5; i < expression.size(); i = i + 4) {
+            expression.insert(i, ")");
+            i++;
+            tmp++;
+            // If number of required brackets has been reached, then we can break.
+            if (tmp == x - 2) break;
+        }
+    }
+
+    // Adds numeric expression onto brackets expression.
+    newExpression = newExpression + expression;
+
+    return newExpression;
+}
+
+// Adds a debug mode for a fully formed expression to demonstate the actual
+// calculation leading to the sum.
+string debugExpression(string expression) {
+    string newExpression = "";
+    
+    return newExpression;
 }

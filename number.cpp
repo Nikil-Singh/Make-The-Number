@@ -4,7 +4,7 @@
 #include "process.hpp"
 
 using namespace std;
-
+int solutions = 0;
 int main() {
     string num, sum;
 
@@ -28,7 +28,8 @@ int main() {
     // Gets the requried number string in the appropriate formats for calculations.
     vector<int> number = convertToVect(num);
     int finalSum = stoi(sum);
-    startProcess(finalSum, number);
 
+    startProcess(finalSum, number);
+    cout << "Number of Solutions: " << solutions << "\n";
     return 0;
 }
