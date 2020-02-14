@@ -29,25 +29,7 @@ int main() {
     vector<int> number = convertToVect(num);
     int finalSum = stoi(sum);
     //calculate(number, finalSum);
-    cout << num << "\n";
-    cout << finalSum << "\n";
-    cout << process("", "", DIVISION, finalSum, 0, 0, number) + 
-        process("", "", MULTIPLICATION, finalSum, 0, 0, number) +
-        process("", "", SUBTRACTION, finalSum, 0, 0, number) + 
-        process("", "", ADDITION, finalSum, 0, 0, number);
-    /*
-    vector<vector<int> >myVector;
-    vector<int> t1;
-    vector<int> t2;
-    t1.push_back(1);
-    t1.push_back(2);
-    t1.push_back(3);
-    t2.push_back(4);
-    t2.push_back(6);
-    t2.push_back(8);
-    myVector.push_back(t1);
-    myVector.push_back(t2);
-    printVectorMatrix(myVector);
-    */
+    cout << startProcess(finalSum, number);
+
     return 0;
 }

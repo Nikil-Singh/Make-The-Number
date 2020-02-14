@@ -2,6 +2,7 @@
 #include <vector>
 #include <cmath>
 using namespace std;
+#define NONE -1
 #define ADDITION 1
 #define SUBTRACTION 2
 #define MULTIPLICATION 3
@@ -24,4 +25,5 @@ void printVectorMatrix(vector<vector<int> > numbers);
 //number of numbers to operate on.
  vector<vector<int> > powerSet(vector<int> operations, int size);
 
-string process(string fullExp, string tmpExp, int op, int req, int sum, int next, vector<int> numbers);
+string startProcess(int req, vector<int> numbers);
+void process(int op, int req, int sum, int depth, vector<int> numbers, string expr, string tmp);

@@ -81,72 +81,85 @@ void printVectorMatrix(vector<vector<int> > numbers) {
      return powerSet;
  }
 
-string process(string fullExp, string tmpExp, int op, int req, int sum, int i, vector<int> numbers) {
-    cout << "tmpExp:" << tmpExp << "\n";
-    if (op == DIVISION) {
-        if (i < numbers.size() && sum % numbers[i] == 0) {
-            if (i == 0) {
-                tmpExp = to_string(numbers[i]);
-            } else {
-                tmpExp += tmpExp + " / " + to_string(numbers[i]);
+
+
+string startProcess(int req, vector<int> numbers) {
+    string fullExpression;
+    do {
+         process(NONE, req, 0, 0, numbers, fullExpression, "");
+    } while (next_permutation(numbers.begin(), numbers.end()));
+    return fullExpression;
+}
+
+void process(int op, int req, int sum, int depth, vector<int> numbers, string expr, string tmp) {
+    if (depth != 0) {
+        if (op == DIVISION) {
+            if (depth == numbers.size() - 1 && sum % numbers[depth] == 0) {
+                sum = sum / numbers[depth];
+                if (sum == req) {
+                    tmp = tmp + " / " + to_string(numbers[depth]) + ",\n";
+                    cout << tmp;
+                }
+            } else if (depth < numbers.size() && sum % numbers[depth] == 0) {
+                tmp = tmp + " / " + to_string(numbers[depth]);
+                sum = sum / numbers[depth];
+                process(DIVISION, req, sum, depth + 1, numbers, expr, tmp);
+                process(MULTIPLICATION, req, sum, depth + 1, numbers, expr, tmp);
+                process(ADDITION, req, sum, depth + 1, numbers, expr, tmp);
+                process(SUBTRACTION, req, sum, depth + 1, numbers, expr, tmp);
             }
-            return process(fullExp, tmpExp, DIVISION, req, sum/numbers[i], i+1, numbers) +
-                process(fullExp, tmpExp, MULTIPLICATION, req, sum/numbers[i], i+1, numbers) +
-                process(fullExp, tmpExp, ADDITION, req, sum/numbers[i], i+1, numbers) +
-                process(fullExp, tmpExp, SUBTRACTION, req, sum/numbers[i], i+1, numbers);
-        } else if (i == numbers.size() && sum == req) {
-            return fullExp + tmpExp + ",\n";
-        } else {
-            return "";
-        }
-    } else if (op == SUBTRACTION) {
-        if (i == numbers.size() && sum == req) {
-            return fullExp + tmpExp + ",\n";
-        } else if (i == numbers.size() && sum != req) {
-            return "";
-        } else {
-            if (i == 0) {
-                tmpExp = to_string(numbers[i]);
-            } else {
-                tmpExp += tmpExp + " - " + to_string(numbers[i]);
+        } else if (op == MULTIPLICATION) {
+            if (depth == numbers.size() - 1) {
+                sum = sum * numbers[depth];
+                if (sum == req) {
+                    tmp = tmp + " * " + to_string(numbers[depth]) + ",\n";
+                    cout << tmp;
+                }
+            } else if (depth < numbers.size()) {
+                tmp = tmp + " * " + to_string(numbers[depth]);
+                sum = sum * numbers[depth];
+                process(DIVISION, req, sum, depth + 1, numbers, expr, tmp);
+                process(MULTIPLICATION, req, sum, depth + 1, numbers, expr, tmp);
+                process(ADDITION, req, sum, depth + 1, numbers, expr, tmp);
+                process(SUBTRACTION, req, sum, depth + 1, numbers, expr, tmp);
             }
-            return process(fullExp, tmpExp, DIVISION, req, sum - numbers[i], i+1, numbers) +
-                process(fullExp, tmpExp, MULTIPLICATION, req, sum - numbers[i], i+1, numbers) +
-                process(fullExp, tmpExp, ADDITION, req, sum - numbers[i], i+1, numbers) +
-                process(fullExp, tmpExp, SUBTRACTION, req, sum - numbers[i], i+1, numbers);
-        }
-    } else if (op == MULTIPLICATION) {
-        if (i == numbers.size() && sum == req) {
-            return fullExp + tmpExp + ",\n";
-        } else if (i == numbers.size() && sum != req) {
-            return "";
-        } else {
-            if (i == 0) {
-                tmpExp = to_string(numbers[i]);
-            } else {
-                tmpExp += tmpExp + " * " + to_string(numbers[i]);
+        } else if (op == ADDITION) {
+            if (depth == numbers.size() - 1) {
+                sum = sum + numbers[depth];
+                if (sum == req) {
+                    tmp = tmp + " + " + to_string(numbers[depth]) + ",\n";
+                    cout << tmp;
+                }
+            } else if (depth < numbers.size()) {
+                tmp = tmp + " + " + to_string(numbers[depth]);
+                sum = sum + numbers[depth];
+                process(DIVISION, req, sum, depth + 1, numbers, expr, tmp);
+                process(MULTIPLICATION, req, sum, depth + 1, numbers, expr, tmp);
+                process(ADDITION, req, sum, depth + 1, numbers, expr, tmp);
+                process(SUBTRACTION, req, sum, depth + 1, numbers, expr, tmp);
             }
-            return process(fullExp, tmpExp, DIVISION, req, sum * numbers[i], i+1, numbers) +
-                process(fullExp, tmpExp, MULTIPLICATION, req, sum * numbers[i], i+1, numbers) +
-                process(fullExp, tmpExp, ADDITION, req, sum * numbers[i], i+1, numbers) +
-                process(fullExp, tmpExp, SUBTRACTION, req, sum * numbers[i], i+1, numbers);
-        }
-    } else if (op == ADDITION) {
-        if (i == numbers.size() && sum == req) {
-            return fullExp + tmpExp + ",\n";
-        } else if (i == numbers.size() && sum != req) {
-            return "";
-        } else {
-            if (i == 0) {
-                tmpExp = to_string(numbers[i]);
-            } else {
-                tmpExp += tmpExp + " + " + to_string(numbers[i]);
+        } else if (op == SUBTRACTION) {
+            if (depth == numbers.size() - 1) {
+                sum = sum - numbers[depth];
+                if (sum == req) {
+                    tmp = tmp + " - " + to_string(numbers[depth]) + ",\n";
+                    cout << tmp;
+                }
+            } else if (depth < numbers.size()) {
+                tmp = tmp + " - " + to_string(numbers[depth]);
+                sum = sum - numbers[depth];
+                process(DIVISION, req, sum, depth + 1, numbers, expr, tmp);
+                process(MULTIPLICATION, req, sum, depth + 1, numbers, expr, tmp);
+                process(ADDITION, req, sum, depth + 1, numbers, expr, tmp);
+                process(SUBTRACTION, req, sum, depth + 1, numbers, expr, tmp);
             }
-            return process(fullExp, tmpExp, DIVISION, req, sum + numbers[i], i+1, numbers) +
-                process(fullExp, tmpExp, MULTIPLICATION, req, sum + numbers[i], i+1, numbers) +
-                process(fullExp, tmpExp, ADDITION, req, sum + numbers[i], i+1, numbers) +
-                process(fullExp, tmpExp, SUBTRACTION, req, sum + numbers[i], i+1, numbers);
         }
+    } else {
+        // Base Case.
+        tmp = to_string(numbers[0]);
+        process(DIVISION, req, numbers[0], 1, numbers, expr, tmp);
+        process(MULTIPLICATION, req, numbers[0], 1, numbers, expr, tmp);
+        process(ADDITION, req, numbers[0], 1, numbers, expr, tmp);
+        process(SUBTRACTION, req, numbers[0], 1, numbers, expr, tmp);
     }
-    return "";
 }
